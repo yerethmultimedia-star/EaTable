@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    // Entrada y salida
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Entorno
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    // Mapas y declaración de tipos
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Librerías y tipos
+    "lib": ["ES2020"],
+    "types": ["node"],
+
+    // Comprobaciones
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}
