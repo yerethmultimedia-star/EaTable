@@ -3,6 +3,7 @@ export interface Review {
   id: string;
   restaurantId: string;
   dishId?: string; // opcional
+  name: string;
   comment: string;
   rating: number; // calificación general
   price: number;   // calificación precio

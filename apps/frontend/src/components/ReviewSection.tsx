@@ -26,18 +26,20 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ restaurantId, dishId, ref
     <div style={{ marginTop: '20px' }}>
       <h3>Reseñas</h3>
 
-      <ReviewForm restaurantId={restaurantId} dishId={dishId} onReviewAdded={loadReviews} />
 
       <IonList>
         {reviews.map(r => (
           <IonItem key={r.id}>
             <IonLabel>
+              <p>{r.name}</p>
               <p>{r.comment}</p>
               <p>⭐ General: {r.rating} • Precio: {r.price} • Atención: {r.service} • Calidad: {r.quality}</p>
             </IonLabel>
           </IonItem>
         ))}
       </IonList>
+
+      <ReviewForm restaurantId={restaurantId} dishId={dishId} onReviewAdded={loadReviews} />
     </div>
   );
 };

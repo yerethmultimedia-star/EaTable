@@ -10,6 +10,7 @@ interface ReviewFormProps {
 }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({ restaurantId, dishId, onReviewAdded }) => {
+  const [name, setName] = useState('');
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(5);
   const [price, setPrice] = useState(5);
@@ -21,6 +22,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ restaurantId, dishId, onReviewA
       id: uuidv4(),
       restaurantId,
       dishId,
+      name,
       comment,
       rating,
       price,
@@ -28,6 +30,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ restaurantId, dishId, onReviewA
       quality
     };
     saveReview(newReview);
+    setName('');
     setComment('');
     setRating(5);
     setPrice(5);
@@ -38,6 +41,11 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ restaurantId, dishId, onReviewA
 
   return (
     <div style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '8px', marginBottom: '15px' }}>
+      <IonItem>
+        <IonLabel position="stacked">Nombre</IonLabel>
+        <IonTextarea value={name} onIonChange={e => setName(e.detail.value!)} />
+      </IonItem>
+
       <IonItem>
         <IonLabel position="stacked">Comentario</IonLabel>
         <IonTextarea value={comment} onIonChange={e => setComment(e.detail.value!)} />
