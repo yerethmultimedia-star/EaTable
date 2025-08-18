@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
   IonPage,
@@ -9,12 +10,6 @@ import {
   IonItem,
   IonLabel,
   IonSpinner,
-  IonSearchbar,
-  IonSelect,
-  IonSelectOption,
-  IonCheckbox,
-  IonRow,
-  IonCol
 } from '@ionic/react';
 import axios from 'axios';
 
@@ -35,6 +30,7 @@ interface Restaurant {
 const Restaurants: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState({
     maxDistance: 5,

@@ -1,61 +1,34 @@
 import React from 'react';
-import { IonList, IonItem, IonLabel, IonButton } from '@ionic/react';
-import { Dish } from '../data/dummyRestaurants';
-import { addDishFavorite, removeDishFavorite, getFavorites } from '../utils/favorites';
+import { IonList, IonItem, IonLabel } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 
-interface DishListProps {
-  dishes: Dish[];
-  restaurantId: string;
-  restaurantName: string;
-  restaurantType: string;
-  restaurantRating: number;
-  favorites: string[]; // array de dishIds favoritos
-  updateFavorites: () => void; // función para actualizar favoritos en el padre
+interface Dish {
+  id: string;
+  name: string;
+  price: number;
+  rating: number;
 }
 
-const DishList: React.FC<DishListProps> = ({
-  dishes,
-  restaurantId,
-  restaurantName,
-  restaurantType,
-  restaurantRating,
-  favorites,
-  updateFavorites
-}) => {
+interface Props {
+  restaurantId: string;
+  dishes: Dish[];
+}
 
-  const isFavorite = (dishId: string) => favorites.includes(dishId);
-
-  const toggleFavorite = (dish: Dish) => {
-    if (isFavorite(dish.id)) {
-      removeDishFavorite(restaurantId, dish.id);
-    } else {
-      addDishFavorite(
-        restaurantId,
-        restaurantName,
-        restaurantType,
-        restaurantRating,
-        dish
-      );
-    }
-    updateFavorites();
-  };
+const DishList: React.FC<Props> = ({ restaurantId, dishes }) => {
+  const history = useHistory();
 
   return (
     <IonList>
-      {dishes.map(d => (
-        <IonItem key={d.id}>
+      {dishes.map(dish => (
+        <IonItem
+          key={dish.id}
+          button
+          onClick={() => history.push(`/restaurants/${restaurantId}/dishes/${dish.id}`)}
+        >
           <IonLabel>
-            <h3>{d.name} - ${d.price}</h3>
-            <p>⭐ {d.rating}</p>
-            {d.allergens && <p>Alérgenos: {d.allergens.join(', ')}</p>}
-            {d.ingredients && <p>Ingredientes: {d.ingredients.join(', ')}</p>}
+            <h2>{dish.name}</h2>
+            <p>💵 {dish.price} | ⭐ {dish.rating}</p>
           </IonLabel>
-          <IonButton
-            color={isFavorite(d.id) ? 'danger' : 'primary'}
-            onClick={() => toggleFavorite(d)}
-          >
-            {isFavorite(d.id) ? 'Eliminar' : 'Favorito'}
-          </IonButton>
         </IonItem>
       ))}
     </IonList>

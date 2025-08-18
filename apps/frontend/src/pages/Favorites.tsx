@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButton } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonButton } from '@ionic/react';
 import Filters from '../components/Filters';
 import { getFavorites, removeDishFavorite, FavoriteDish } from '../utils/favorites';
+import ReviewSection from '../components/ReviewSection';
 
 const Favorites: React.FC = () => {
-  const history = useHistory();
   const [favorites, setFavorites] = useState<FavoriteDish[]>(getFavorites());
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
@@ -30,6 +29,11 @@ const Favorites: React.FC = () => {
     if (ratingFilter && Math.floor(f.rating) !== ratingFilter) return false;
     return true;
   });
+
+  const toggleFavorite = (f: FavoriteDish) => {
+    removeDishFavorite(f.restaurantId, f.dishId);
+    setFavorites(getFavorites());
+  };
 
   return (
     <IonPage>
@@ -57,21 +61,27 @@ const Favorites: React.FC = () => {
           setRatingFilter={setRatingFilter}
         />
 
-        <IonList>
+        <IonAccordionGroup>
           {filtered.map(f => (
-            <IonItem key={f.dishId} button onClick={() => history.push(`/restaurant/${f.restaurantId}`)}>
-              <IonLabel>
-                <h2>{f.restaurantName}</h2>
-                <p>{f.dishName} - ${f.price} • ⭐ {f.rating}</p>
+            <IonAccordion key={f.dishId} value={f.dishId}>
+              <IonItem slot="header">
+                <IonLabel>
+                  <h2>{f.restaurantName}</h2>
+                  <p>{f.dishName} - ${f.price} • ⭐ {f.rating}</p>
+                </IonLabel>
+                <IonButton color="danger" onClick={() => toggleFavorite(f)}>
+                  Eliminar
+                </IonButton>
+              </IonItem>
+
+              <div slot="content" style={{ padding: '0 10px 10px 10px' }}>
                 {f.allergens && <p>Alérgenos: {f.allergens.join(', ')}</p>}
                 {f.ingredients && <p>Ingredientes: {f.ingredients.join(', ')}</p>}
-              </IonLabel>
-              <IonButton color="danger" onClick={() => { removeDishFavorite(f.restaurantId, f.dishId); setFavorites(getFavorites()); }}>
-                Eliminar
-              </IonButton>
-            </IonItem>
+                <ReviewSection restaurantId={f.restaurantId} dishId={f.dishId} />
+              </div>
+            </IonAccordion>
           ))}
-        </IonList>
+        </IonAccordionGroup>
       </IonContent>
     </IonPage>
   );

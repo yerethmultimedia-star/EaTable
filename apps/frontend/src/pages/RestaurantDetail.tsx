@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButton } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonButton, IonAccordion, IonAccordionGroup, IonIcon } from '@ionic/react';
+import { bookmarkOutline, bookmark } from 'ionicons/icons';
 import Filters from '../components/Filters';
-import { dummyRestaurants, Restaurant, Dish } from '../data/dummyRestaurants';
+import { dummyRestaurants, Dish } from '../data/dummyRestaurants';
 import { getFavorites, addDishFavorite, removeDishFavorite } from '../utils/favorites';
+import ReviewSection from '../components/ReviewSection';
 
 const RestaurantDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +17,7 @@ const RestaurantDetail: React.FC = () => {
   const [priceFilter, setPriceFilter] = useState<number | null>(null);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [favorites, setFavorites] = useState(getFavorites());
+  //const [openDishId, setOpenDishId] = useState<string | null>(null);
 
   const allTypes = [restaurant.typeOfFood];
   const allAllergens = Array.from(new Set(restaurant.dishes.flatMap(d => d.allergens || [])));
@@ -73,21 +76,27 @@ const RestaurantDetail: React.FC = () => {
           setRatingFilter={setRatingFilter}
         />
 
-        <IonList>
+        <IonAccordionGroup>
           {filteredDishes.map(d => (
-            <IonItem key={d.id}>
-              <IonLabel>
-                <h3>{d.name} - ${d.price}</h3>
-                <p>⭐ {d.rating}</p>
+            <IonAccordion key={d.id} value={d.id}>
+              <IonItem slot="header">
+                <IonLabel>
+                  <h3>{d.name} - ${d.price}</h3>
+                  <p>⭐ {d.rating}</p>
+                </IonLabel>
+                <IonButton color={isFavorite(d.id) ? 'danger' : 'primary'} onClick={() => toggleFavorite(d)}>
+                  <IonIcon icon={isFavorite(d.id) ? bookmark : bookmarkOutline} />
+                </IonButton>
+              </IonItem>
+
+              <div slot="content" style={{ padding: '0 10px 10px 10px' }}>
                 {d.allergens && <p>Alérgenos: {d.allergens.join(', ')}</p>}
                 {d.ingredients && <p>Ingredientes: {d.ingredients.join(', ')}</p>}
-              </IonLabel>
-              <IonButton color={isFavorite(d.id) ? 'danger' : 'primary'} onClick={() => toggleFavorite(d)}>
-                {isFavorite(d.id) ? 'Eliminar' : 'Favorito'}
-              </IonButton>
-            </IonItem>
+                <ReviewSection restaurantId={restaurant.id} dishId={d.id} />
+              </div>
+            </IonAccordion>
           ))}
-        </IonList>
+        </IonAccordionGroup>
       </IonContent>
     </IonPage>
   );

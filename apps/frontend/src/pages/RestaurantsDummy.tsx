@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel } from '@ionic/react';
 import Filters from '../components/Filters';
-import { dummyRestaurants, Restaurant } from '../data/dummyRestaurants';
+import { dummyRestaurants } from '../data/dummyRestaurants';
 
 const RestaurantsDummy: React.FC = () => {
   const history = useHistory();
